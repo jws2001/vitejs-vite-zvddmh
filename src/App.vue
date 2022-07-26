@@ -1,23 +1,86 @@
 <script setup lang="ts">
-const handleBlur = () => {
-  console.log('失去焦点事件');
-};
+import { defineAsyncComponent } from 'vue';
+import { delay, random } from './utils';
+import B from './components/B.vue';
+import C from './components/C.vue';
+import D from './components/D.vue';
+import Loding from './components/Loding.vue';
+import Error from './components/Error.vue';
+
+const AsyncA = defineAsyncComponent({
+  loader: async () => {
+    await delay(random(1000, 4000));
+    return import('./components/A.vue');
+  },
+  loadingComponent: Loding,
+  delay: 200,
+  errorComponent: Error,
+});
+
+const AsyncB = defineAsyncComponent({
+  loader: async () => {
+    await delay(random(1000, 4000));
+    return import('./components/B.vue');
+  },
+  loadingComponent: Loding,
+  delay: 2000,
+  errorComponent: Error,
+});
+
+const AsyncC = defineAsyncComponent({
+  loader: async () => {
+    await delay(random(1000, 4000));
+    return import('./components/C.vue');
+  },
+  loadingComponent: Loding,
+  delay: 2000,
+  errorComponent: Error,
+});
+
+const AsyncD = defineAsyncComponent({
+  loader: async () => {
+    await delay(random(1000, 4000));
+    return import('./components/D.vue');
+  },
+  loadingComponent: Loding,
+  delay: 2000,
+  errorComponent: Error,
+});
 </script>
 
 <template>
-  <input type="text" @blur="handleBlur" />
+  <div class="demo">
+    <aside class="aside"></aside>
+    <main class="main">
+      <Suspense>
+        <AsyncA />
+        <template #fallback> <Loding /> </template>
+      </Suspense>
+      <Suspense>
+        <AsyncB />
+        <template #fallback> <Loding /> </template>
+      </Suspense>
+      <Suspense>
+        <AsyncC />
+        <template #fallback> <Loding /> </template>
+      </Suspense>
+      <Suspense>
+        <AsyncD />
+        <template #fallback> <Loding /> </template>
+      </Suspense>
+    </main>
+  </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+<style scoped lang="less">
+.demo {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 250px 1fr;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
 }
 </style>
